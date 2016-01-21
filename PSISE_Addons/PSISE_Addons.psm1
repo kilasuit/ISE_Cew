@@ -360,3 +360,178 @@ $DefaultScriptPesterTests = Get-Content -Path "$(Split-path -Path ((get-module P
 $DefaultPesterTests = Get-Content -Path "$(Split-path -Path ((get-module PSISE_Addons -ListAvailable).Path) -Parent)\PSISE_Addons.default.tests.ps1"
 }
 #>
+
+function Get-AlignedText
+{
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [AllowEmptyString()]
+        [AllowEmptyCollection()]
+        [string[]]
+        $Text,
+
+        [string]
+        $Delimiter = '='
+    )
+
+    $rightmostIndex = -1
+
+    $lines =
+    foreach ($string in $Text)
+    {
+        foreach ($line in $string -split '\r?\n')
+        {
+            $position = $line.IndexOf($Delimiter)
+            if ($position -gt $rightmostIndex) { $rightmostIndex = $position }
+
+            [pscustomobject] @{
+                Line     = $line
+                Position = $position
+            }
+        }
+    }
+
+    @(
+        foreach ($line in $lines)
+        {
+            if ($line.Position -ge 0 -and $line.Position -lt $rightmostIndex)
+            {
+                "{0}{1,$($rightmostIndex - $line.Position)}{2}" -f $line.Line.SubString(0, $line.Position), ' ', $line.Line.SubString($line.Position)
+            }
+            else
+            {
+                $line.Line
+            }
+        }
+    ) -join "`r`n"
+}
+
+<#
+     These bits go into my profile:
+
+function AlignEquals
+{
+    $psise.CurrentFile.Editor.InsertText((Get-AlignedText -Text $psISE.CurrentFile.Editor.SelectedText -Delimiter '='))
+}
+
+$null = $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("Align = signs in selected text.", { AlignEquals }, 'F6')
+
+     To use it, I highlight a block of code (the entire lines, including leading whitespace) and press F6.
+
+    Another useful profile hotkey, to replace all tabs with spaces, remove trailing spaces, and make sure the file ends with a newline.
+    (for clean Git commits.)
+
+function CleanWhitespace
+{
+    $newText = $psise.CurrentFile.Editor.Text -replace '\t', '    ' -replace '[ ]+([\r\n])', '$1' -replace '^\s*?$' -split '\r?\n' -join "`r`n"
+    if ($newText.Length -gt 0 -and $newText[-1] -ne "`n")
+    {
+        $newText = "$newText`r`n"
+    }
+
+    if ($newText -ne $psise.CurrentFile.Editor.Text)
+    {
+        $psise.CurrentFile.Editor.Text = $newText
+    }
+}
+
+$null = $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("Clean up whitespace", { CleanWhitespace }, 'F7')
+
+
+     For writing proxy functions:
+
+function Get-ProxyCode {
+    [CmdletBinding()]
+    [OutputType([String])]
+    param (
+        [Parameter(Mandatory=$true, Position=0)]
+        [System.String]
+        $Name,
+        [Parameter(Mandatory=$false,Position=1)]
+        [System.Management.Automation.CommandTypes]
+        $CommandType
+    )
+    process {
+        $command = $null
+        if ($PSBoundParameters['CommandType']) {
+            $command = $ExecutionContext.InvokeCommand.GetCommand($Name, $CommandType)
+        } else {
+            $command = (Get-Command -Name $Name)
+        }
+
+
+        # Add a function header and indentation to the output of ProxyCommand::Create
+
+        $MetaData = New-Object System.Management.Automation.CommandMetaData ($command)
+        $code = [System.Management.Automation.ProxyCommand]::Create($MetaData)
+
+        $sb = New-Object -TypeName System.Text.StringBuilder
+
+        $sb.AppendLine("function $($command.Name)") | Out-Null
+        $sb.AppendLine('{') | Out-Null
+
+        foreach ($line in $code -split '\r?\n') {
+            $sb.AppendLine('    {0}' -f $line) | Out-Null
+        }
+
+        $sb.AppendLine('}') | Out-Null
+
+        $sb.ToString()
+    }
+}
+
+Set-Alias -Name gpc -Value Get-ProxyCode
+
+function New-ISETab {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$false, Position=1, ValueFromPipeline = $true)]
+        [System.String[]]
+        $Text,
+
+        [Parameter(Mandatory=$false)]
+        [System.Object]
+        $Separator
+    )
+
+    begin {
+        if (!$psISE) {
+            throw 'This command can only be run from within the PowerShell ISE.'
+        }
+
+        if ((!$PSBoundParameters['Separator']) -and (Test-Path 'variable:\OFS')) {
+            $Separator = $OFS
+        }
+
+        if (!$Separator) { $Separator = "`r`n" }
+
+        $tab = $psISE.CurrentPowerShellTab.Files.Add()
+
+        $sb = New-Object System.Text.StringBuilder
+    }
+
+    process {
+        foreach ($str in @($Text)) {
+            if ($sb.Length -gt 0) {
+                $sb.Append(("{0}{1}" -f $Separator, $str)) | Out-Null
+            } else {
+                $sb.Append($str) | Out-Null
+            }
+        }
+    }
+
+    end {
+        $tab.Editor.Text = $sb.ToString()
+        $tab.Editor.SetCaretPosition(1,1)
+    }
+}
+
+Set-Alias -Name nt -Value New-ISETab
+
+
+      Typical usage:  gpc Get-Command | nt
+                      Get-ProxyCode Get-Command | New-IseTab
+
+
+#>
