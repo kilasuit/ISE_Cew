@@ -149,6 +149,7 @@ Function Save-AllUnnamedFiles {
                 $_.saveas($fullname) ; 
                 if ($type -eq 'Script')  {
                     New-Item -Path .\$filename.basic.tests.ps1 -ItemType File -Force | Out-Null ;
+                    New-Item -Path .\$filename.bespoke.tests.ps1 -ItemType File -Force | Out-Null ;
                     Set-Content -Path .\$filename.basic.tests.ps1 -Value $defaultPesterTests ;
                     git add --all  ;
                     $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
@@ -159,6 +160,7 @@ Function Save-AllUnnamedFiles {
                     $psd1.Path = "$path$filename.psd1" ; $psd1.Description = $psd1.Description.Replace('*ModuleName*',$filename) ;
                     New-ModuleManifest @psd1 ;
                     New-Item -Path .\$filename.basic.tests.ps1 -ItemType File -Force | Out-Null ;
+                    New-Item -Path .\$filename.bespoke.tests.ps1 -ItemType File -Force | Out-Null ;
                     Set-Content -Path .\$filename.basic.tests.ps1 -Value $defaultPesterTests ;
                     git add --all ;
                     $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
@@ -262,6 +264,7 @@ If ($host.Name -ne 'Windows PowerShell ISE Host')
                         $CurrentFile.saveas($fullname) ;
                         if ($type -eq 'Script')  { 
                             New-Item -Path .\$filename.basic.tests.ps1 -ItemType File -Force | Out-Null ;
+                            New-Item -Path .\$filename.bespoke.tests.ps1 -ItemType File -Force | Out-Null ;
                             Set-Content -Path .\$filename.basic.tests.ps1 -Value $defaultPesterTests ;
                             git add --all ;
                             $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
@@ -274,6 +277,7 @@ If ($host.Name -ne 'Windows PowerShell ISE Host')
                             $psd1.Path = "$path$filename.psd1" ; $psd1.Description = $psd1.Description.Replace('*ModuleName*',$filename) ;
                             New-ModuleManifest @psd1 ;
                             New-Item -Path .\$filename.basic.tests.ps1 -ItemType File -Force | Out-Null ;
+                            New-Item -Path .\$filename.bespoke.tests.ps1 -ItemType File -Force | Out-Null ;
                             Set-Content -Path .\$filename.basic.tests.ps1 -Value $defaultPesterTests ;
                             Set-Location .. ; 
                             git add $filename\* ;
