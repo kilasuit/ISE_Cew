@@ -148,8 +148,8 @@ Function Save-AllUnnamedFiles {
                 git init ;
                 $_.saveas($fullname) ; 
                 if ($type -eq 'Script')  {
-                    New-Item -Path .\$filename.tests.ps1 -ItemType File -Force | Out-Null ;
-                    Set-Content -Path .\$filename.tests.ps1 -Value $defaultPesterTests ;
+                    New-Item -Path .\$filename.basic.tests.ps1 -ItemType File -Force | Out-Null ;
+                    Set-Content -Path .\$filename.basic.tests.ps1 -Value $defaultPesterTests ;
                     git add --all  ;
                     $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
                     if($CustomCommit) {$CustomCommitMessage = Get-CustomCommitMessage -filename $filename  ; git commit -m $CustomCommitMessage }
@@ -158,8 +158,8 @@ Function Save-AllUnnamedFiles {
                 elseif ($type -eq 'Module') { $psd1.RootModule = $name ; 
                     $psd1.Path = "$path$filename.psd1" ; $psd1.Description = $psd1.Description.Replace('*ModuleName*',$filename) ;
                     New-ModuleManifest @psd1 ;
-                    New-Item -Path .\$filename.tests.ps1 -ItemType File -Force | Out-Null ;
-                    Set-Content -Path .\$filename.tests.ps1 -Value $defaultPesterTests ;
+                    New-Item -Path .\$filename.basic.tests.ps1 -ItemType File -Force | Out-Null ;
+                    Set-Content -Path .\$filename.basic.tests.ps1 -Value $defaultPesterTests ;
                     git add --all ;
                     $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
                     if($CustomCommit) {$CustomCommitMessage = Get-CustomCommitMessage -filename $filename  ; git commit -m $CustomCommitMessage }
@@ -261,8 +261,8 @@ If ($host.Name -ne 'Windows PowerShell ISE Host')
                         git init ;
                         $CurrentFile.saveas($fullname) ;
                         if ($type -eq 'Script')  { 
-                            New-Item -Path .\$filename.tests.ps1 -ItemType File -Force | Out-Null ;
-                            Set-Content -Path .\$filename.tests.ps1 -Value $defaultPesterTests ;
+                            New-Item -Path .\$filename.basic.tests.ps1 -ItemType File -Force | Out-Null ;
+                            Set-Content -Path .\$filename.basic.tests.ps1 -Value $defaultPesterTests ;
                             git add --all ;
                             $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
                             if($CustomCommit) {$CustomCommitMessage = Get-CustomCommitMessage -filename $filename  ; git commit -m $CustomCommitMessage }
@@ -273,8 +273,8 @@ If ($host.Name -ne 'Windows PowerShell ISE Host')
                             $psd1.RootModule = $name ; 
                             $psd1.Path = "$path$filename.psd1" ; $psd1.Description = $psd1.Description.Replace('*ModuleName*',$filename) ;
                             New-ModuleManifest @psd1 ;
-                            New-Item -Path .\$filename.tests.ps1 -ItemType File -Force | Out-Null ;
-                            Set-Content -Path .\$filename.tests.ps1 -Value $defaultPesterTests ;
+                            New-Item -Path .\$filename.basic.tests.ps1 -ItemType File -Force | Out-Null ;
+                            Set-Content -Path .\$filename.basic.tests.ps1 -Value $defaultPesterTests ;
                             Set-Location .. ; 
                             git add $filename\* ;
                             $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
