@@ -141,25 +141,31 @@ Function Save-AllUnnamedFiles {
         $psise.CurrentPowerShellTab.Files.Where({$_.IsUntitled}).Foreach({$firstLine = $(($_.Editor.Text -split '[\n]')[0].Trim()) ;
                 if ($firstLine.Contains('Script')) { $type = 'Script' ; $filename = $($firstline.replace('#Script','').Replace('#','')) ; $name = "$filename.ps1" }
                 elseif ($firstLine.Contains('Module')) { $type = 'Module'; $filename = $($firstline.replace('#Module','').Replace('#','')) ; $name = "$filename.psm1" }
-                if ($type -eq 'Script') {$path = "$(Get-PSDrive Scripts-Wip | Select-Object -ExpandProperty root)\"}
+                if ($type -eq 'Script') {$path = "$(Get-PSDrive Scripts-Wip | Select-Object -ExpandProperty root)\$filename\" ; New-item $path -ItemType Directory -Force | Out-Null }
                 elseif ($type -eq 'Module') {$path = "$(Get-PSDrive Modules-Wip | Select-Object -ExpandProperty root)\$filename\" ; New-item $path -ItemType Directory -Force | Out-Null} 
                 $fullname = "$path$name" ; 
-                $_.saveas($fullname) ; 
                 Set-Location $path ;
-                if ($type -eq 'Script')  { Set-Location .. ; 
+                git init ;
+                $_.saveas($fullname) ; 
+                if ($type -eq 'Script')  {
                     New-Item -Path .\$filename.tests.ps1 -ItemType File -Force | Out-Null ;
                     Set-Content -Path .\$filename.tests.ps1 -Value $defaultPesterTests ;
-                    git add WIP\$name ; 
-                    git commit -m "Saving script $name at $(get-date -Format "dd/MM/yyyy HH:mm") and commiting them to Repos"}
+                    git add --all  ;
+                    $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
+                    if($CustomCommit) {$CustomCommitMessage = Get-CustomCommitMessage -filename $filename  ; git commit -m $CustomCommitMessage }
+                    else { git commit -m "Saving script $filename at $(get-date -Format "dd/MM/yyyy HH:mm") and commiting it the to Scripts WIP Repo"} 
+                }
                 elseif ($type -eq 'Module') { $psd1.RootModule = $name ; 
                     $psd1.Path = "$path$filename.psd1" ; $psd1.Description = $psd1.Description.Replace('*ModuleName*',$filename) ;
                     New-ModuleManifest @psd1 ;
                     New-Item -Path .\$filename.tests.ps1 -ItemType File -Force | Out-Null ;
                     Set-Content -Path .\$filename.tests.ps1 -Value $defaultPesterTests ;
-                    Set-Location .. ; 
-                    git add $filename\* ; 
-                    git commit -m "Saving Module $name at $(get-date -Format "dd/MM/yyyy HH:mm") and commiting it to the Repos"}
-        })
+                    git add --all ;
+                    $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
+                    if($CustomCommit) {$CustomCommitMessage = Get-CustomCommitMessage -filename $filename  ; git commit -m $CustomCommitMessage }
+                    else { git commit -m "Saving New Module $filename at $(get-date -Format "dd/MM/yyyy HH:mm") and commiting to the Modules Repo" }
+                }
+        }) 
         #Correct Location for the Set-Location as in the Else loop from the 1st If
     Set-Location $oldlocation 
     }
@@ -222,60 +228,62 @@ Function Save-CurrentISEFile {
 If ($host.Name -ne 'Windows PowerShell ISE Host')
     { Write-Warning 'Unable to be used in the console please use this in PowerShell ISE'}
     else {
-$oldlocation = get-location
-$currentfile = $psISE.CurrentFile
-if (($CurrentFile.IsSaved -eq $false) -and ($CurrentFile.IsUntitled -eq $false)) {
-    Write-Verbose 'Now Saving existing file to its current saved path'
-    $CurrentFile.Save()
-    $displayname = $($CurrentFile.DisplayName.Replace('*','')) 
-    Set-Location $CurrentFile.FullPath.Replace($DisplayName,'') ; 
-    if((test-path .\.git\) -eq $true) { git add $displayname ; 
-        $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $DisplayName"
-        if($CustomCommit) {$CustomCommitMessage = Get-CustomCommitMessage -filename $displayname  ; git commit -m $CustomCommitMessage }
-        else { git commit -m "Saving file $displayname at $(get-date -Format "dd/MM/yyyy HH:mm") and commiting to Repo"} 
-    }
-    else {
-    do {Set-Location .. } until ((Test-Path .\.git\) -eq $true) } ;
-    $gitfolder = Get-Item .\ ; 
-    $gitfile = $currentfile.FullPath.Replace("$($gitfolder.FullName)","").TrimStart('\') ; 
-    git add $gitfile ;
-    $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $displayname"
-    if($CustomCommit) {$CustomCommitMessage = Get-CustomCommitMessage -filename $displayname  ; git commit -m $CustomCommitMessage }
-    else { git commit -m "Saving file $gitfile at $(get-date -Format "dd/MM/yyyy HH:mm") and commiting to Repo"} ;
-  }
-    elseif (($CurrentFile.IsSaved -eq $false) -and ($CurrentFile.IsUntitled -eq $true)) {
-        $firstLine = $(($currentfile.Editor.Text -split '[\n]')[0].Trim()) ;
-                if ($firstLine.Contains('Script')) { $type = 'Script' ; $filename = $($firstline.replace('#Script','').Replace('#','')) ; $name = "$filename.ps1" }
-                elseif ($firstLine.Contains('Module')) { $type = 'Module'; $filename = $($firstline.replace('#Module','').Replace('#','')) ; $name = "$filename.psm1" }
-                if ($type -eq 'Script') {$path = "$(Get-PSDrive Scripts-wip | Select-Object -ExpandProperty root)\"}
-                elseif ($type -eq 'Module') {$path = "$(Get-PSDrive Modules-wip | Select-Object -ExpandProperty root)\$filename\" ; New-item $path -ItemType Directory -Force | Out-Null } 
-                $fullname = "$path$name" ; 
-                $Currentfile.saveas($fullname) ; 
-                Set-Location $path ;
-                if ($type -eq 'Script')  { 
-                    New-Item -Path .\$filename.tests.ps1 -ItemType File -Force | Out-Null ;
-                    Set-Content -Path .\$filename.tests.ps1 -Value $defaultPesterTests ;
-                    git add --all ;
-                    $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
-                    if($CustomCommit) {$CustomCommitMessage = Get-CustomCommitMessage -filename $filename  ; git commit -m $CustomCommitMessage }
-                    else { git commit -m "Saving file $displayname at $(get-date -Format "dd/MM/yyyy HH:mm") and commiting to Repo"}
-                    }
-                elseif ($type -eq 'Module') { 
-                Set-location $path
-                $psd1.RootModule = $name ; 
-                    $psd1.Path = "$path$filename.psd1" ; $psd1.Description = $psd1.Description.Replace('*ModuleName*',$filename) ;
-                    New-ModuleManifest @psd1 ;
-                    New-Item -Path .\$filename.tests.ps1 -ItemType File -Force | Out-Null ;
-                    Set-Content -Path .\$filename.tests.ps1 -Value $defaultPesterTests ;
-                    Set-Location .. ; 
-                    git add $filename\* ;
-                    $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
-                    if($CustomCommit) {$CustomCommitMessage = Get-CustomCommitMessage -filename $filename  ; git commit -m $CustomCommitMessage }
-                    else { git commit -m "Saving file $displayname at $(get-date -Format "dd/MM/yyyy HH:mm") and commiting to Repo"}
-        }
-    }
+        $oldlocation = Get-Location
+        $currentfile = $psISE.CurrentFile
+        if (($CurrentFile.IsSaved -eq $false) -and ($CurrentFile.IsUntitled -eq $false)) {
+            Write-Verbose 'Now Saving existing file to its current saved path'
+            $CurrentFile.Save()
+            $displayname = $($CurrentFile.DisplayName.Replace('*','')) 
+            Set-Location $CurrentFile.FullPath.Replace($DisplayName,'') ; 
+            if((test-path .\.git\) -eq $true) { git add $displayname ; 
+                $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $DisplayName"
+                if($CustomCommit) {$CustomCommitMessage = Get-CustomCommitMessage -filename $displayname  ; git commit -m $CustomCommitMessage }
+                else { git commit -m "Saving file $displayname at $(get-date -Format "dd/MM/yyyy HH:mm") and commiting to Repo"} 
+            }
+            else { 
+                    { do {Set-Location .. } until ((Test-Path .\.git\) -eq $true) } ;
+                        $gitfolder = Get-Item .\ ; 
+                        $gitfile = $currentfile.FullPath.Replace("$($gitfolder.FullName)","").TrimStart('\') ; 
+                        git add $gitfile ;
+                        $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $displayname"
+                        if($CustomCommit) {$CustomCommitMessage = Get-CustomCommitMessage -filename $displayname  ; git commit -m $CustomCommitMessage }
+                        else { git commit -m "Saving file $gitfile at $(get-date -Format "dd/MM/yyyy HH:mm") and commiting to Repo"} ;
+                 }
+            }
+        elseif (($CurrentFile.IsSaved -eq $false) -and ($CurrentFile.IsUntitled -eq $true)) {
+                $firstLine = $(($currentfile.Editor.Text -split '[\n]')[0].Trim()) ;
+                        if ($firstLine.Contains('Script')) { $type = 'Script' ; $filename = $($firstline.replace('#Script','').Replace('#','')) ; $name = "$filename.ps1" }
+                        elseif ($firstLine.Contains('Module')) { $type = 'Module'; $filename = $($firstline.replace('#Module','').Replace('#','')) ; $name = "$filename.psm1" }
+                        if ($type -eq 'Script') {$path = "$(Get-PSDrive Scripts-Wip | Select-Object -ExpandProperty root)\$filename\" ; New-item $path -ItemType Directory -Force | Out-Null }
+                        elseif ($type -eq 'Module') {$path = "$(Get-PSDrive Modules-Wip | Select-Object -ExpandProperty root)\$filename\" ; New-item $path -ItemType Directory -Force | Out-Null} 
+                        $fullname = "$path$name" ; 
+                        Set-Location $path ;
+                        git init ;
+                        $CurrentFile.saveas($fullname) ;
+                        if ($type -eq 'Script')  { 
+                            New-Item -Path .\$filename.tests.ps1 -ItemType File -Force | Out-Null ;
+                            Set-Content -Path .\$filename.tests.ps1 -Value $defaultPesterTests ;
+                            git add --all ;
+                            $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
+                            if($CustomCommit) {$CustomCommitMessage = Get-CustomCommitMessage -filename $filename  ; git commit -m $CustomCommitMessage }
+                            else { git commit -m "Saving file $displayname at $(get-date -Format "dd/MM/yyyy HH:mm") and commiting to Repo"}
+                        }
+                        elseif ($type -eq 'Module') { 
+                            Set-location $path
+                            $psd1.RootModule = $name ; 
+                            $psd1.Path = "$path$filename.psd1" ; $psd1.Description = $psd1.Description.Replace('*ModuleName*',$filename) ;
+                            New-ModuleManifest @psd1 ;
+                            New-Item -Path .\$filename.tests.ps1 -ItemType File -Force | Out-Null ;
+                            Set-Content -Path .\$filename.tests.ps1 -Value $defaultPesterTests ;
+                            Set-Location .. ; 
+                            git add $filename\* ;
+                            $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
+                            if($CustomCommit) {$CustomCommitMessage = Get-CustomCommitMessage -filename $filename  ; git commit -m $CustomCommitMessage }
+                            else { git commit -m "Saving file $displayname at $(get-date -Format "dd/MM/yyyy HH:mm") and commiting to Repo"}
+                        }
+            }
     Set-Location $oldlocation
-}
+        }
 }
 
 Function Get-CustomCommitMessage {
