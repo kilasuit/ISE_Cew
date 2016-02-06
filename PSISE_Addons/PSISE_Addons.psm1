@@ -2,7 +2,8 @@
 Function Save-AllNamedFiles {
     <#
         .SYNOPSIS
-        Saves all Files in a PowerShell ISE Tab that already have a filename 
+        Saves all Files in a PowerShell ISE Tab that already have a filename
+         
         .DESCRIPTION
         This uses $PSISE.CurrentFiles to save all files that have been edited in the session
    
@@ -16,8 +17,10 @@ Function Save-AllNamedFiles {
         function finds the directory that contains the Git Repo Store i.e the folder that contains a hidden subfolder called .git
 
         If not then you NEED to learn Git and start to use it - this function makes it so much simpler to deal with as well!  
+        
         .EXAMPLE
         Save-AllUnnamedFiles
+        
         .EXAMPLE
         Place into your Profile the following
 
@@ -33,16 +36,21 @@ Function Save-AllNamedFiles {
         
         .OUTPUTS
         Updated Saved PowerShell scripts/module files and Git Commits
+        
         .NOTES
         This Function drastically makes Source control with git much easier to deal with and ensures that you never miss a small 
         change to a script
+        
         .AUTHOR
         Ryan Yates - ryan.yates@kilasuit.org
+        
         .LICENSE
         MIT 
+        
         .CREDITS
         Jeff Hicks Blog about extending the ISE with Addons as can be found at 
         https://www.petri.com/using-addonsmenu-property-powershell-ise-object-model
+        
         .TO-DO
         Neaten this up and build a V2 version
     #>
@@ -373,6 +381,9 @@ $DefaultPesterTests = Get-Content -Path "$(Split-path -Path ((get-module PSISE_A
 }
 #>
 
+
+
+#region Dave Wyatt additons
 function Get-AlignedText
 {
     [CmdletBinding()]
@@ -547,3 +558,4 @@ Set-Alias -Name nt -Value New-ISETab
 
 
 #>
+#endregion
