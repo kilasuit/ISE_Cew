@@ -110,7 +110,7 @@ PrivateData = @{
         Tags = @('Pester','ISE','PSScriptAnaylzer','Script Creation','Module Creation','Creation Workflow Simplification','PSDrives')
 
         # A URL to the license for this module.
-        LicenseUri = 'https://github.com/kilasuit/PSISE_Addons/readme.md'
+        LicenseUri = 'https://github.com/kilasuit/PSISE_Addons/License.md'
 
         # A URL to the main website for this project.
         ProjectUri = 'https://github.com/kilasuit/PSISE_Addons'
