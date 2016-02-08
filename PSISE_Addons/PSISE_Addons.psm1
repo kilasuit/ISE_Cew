@@ -40,18 +40,14 @@ Function Save-AllNamedFiles {
         .NOTES
         This Function drastically makes Source control with git much easier to deal with and ensures that you never miss a small 
         change to a script
-        
-        .AUTHOR
+        AUTHOR
         Ryan Yates - ryan.yates@kilasuit.org
-        
-        .LICENSE
+        LICENSE
         MIT 
-        
-        .CREDITS
+        CREDITS
         Jeff Hicks Blog about extending the ISE with Addons as can be found at 
         https://www.petri.com/using-addonsmenu-property-powershell-ise-object-model
-        
-        .TO-DO
+        TO-DO
         Neaten this up and build a V2 version
     #>
     #Requires -Version 4.0
@@ -103,7 +99,7 @@ Function Save-AllUnnamedFiles {
         and the function will automatically create you an example .psd1 module manifest with the details as detailed in the ps1ddetails variable at the the bottom of
         the PSISE_Addons psm1 file.
    
-        Also as I would expect that your using Git for Source control (You are using source control right?? - Do you see a patter forming here??) 
+        Also as I would expect that your using Git for Source control (You are using source control right?? - Do you see a pattern forming here??) 
         this will also commit the file saves to Git on the basis that you have the Scripts PSDrive Root as the Git Repo store i.e this folder
         contains a hidded subfolder called .git
    
@@ -127,13 +123,13 @@ Function Save-AllUnnamedFiles {
         New Saved files and Git Commits
         .NOTES
         This Function drastically makes Source control with git much easier to deal with and ensures that you never miss a small change to a script
-        .AUTHOR
+        AUTHOR
         Ryan Yates - ryan.yates@kilasuit.org
-        .LICENSE
+        LICENSE
         MIT 
-        .CREDITS
+        CREDITS
         Jeff Hicks Blog about extending the ISE with Addons as can be found at https://www.petri.com/using-addonsmenu-property-powershell-ise-object-model
-        .TO-DO
+        TO-DO
         Neaten this up and build a V2 version
     #>
     #Requires -Version 4.0
@@ -198,7 +194,7 @@ Function Save-CurrentISEFile {
         and the function will automatically create you an example .psd1 module manifest with the details as detailed in the ps1ddetails variable at the the bottom of
         the PSISE_Addons psm1 file.
    
-        Also as I would expect that your using Git for Source control (You are using source control right?? - Do you see a patter forming here??) 
+        Also as I would expect that your using Git for Source control (You are using source control right?? - Do you see a pattern forming here??) 
         this will also commit the file saves to Git on the basis that you have the Scripts-Wip PSDrive Root as the Git Repo store i.e this folder
         contains a hidded subfolder called .git or the Modules-WIP PSDrive
    
@@ -222,13 +218,13 @@ Function Save-CurrentISEFile {
         New Saved files and Git Commits
         .NOTES
         This Function drastically makes Source control with git much easier to deal with and ensures that you never miss a small change to a script
-        .AUTHOR
+        AUTHOR
         Ryan Yates - ryan.yates@kilasuit.org
-        .LICENSE
+        LICENSE
         MIT 
-        .CREDITS
+        CREDITS
         Jeff Hicks Blog about extending the ISE with Addons as can be found at https://www.petri.com/using-addonsmenu-property-powershell-ise-object-model
-        .TO-DO
+        TO-DO
         Neaten this up and build a V2 version
     #>
     #Requires -Version 4.0
@@ -355,11 +351,18 @@ function Request-YesOrNo {
 	}
 }
 
-
 <#
 Suggestion to put this in your PowerShell ISE Profile or in a General Profile in a scriptblock like the following 
 
 if ($host.Name -eq "Windows PowerShell ISE Host") {
+
+        $MyMenu = $psise.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("PSISE_Addons",$null,$null)
+        $MyMenu.Submenus.Add("Save & Commit Current ISE File", { Save-CurrentISEFile }, "Ctrl+Alt+Shift+S") | Out-Null
+        $MyMenu.Submenus.Add("Save & Commit all files that have been named", { Save-AllNamedFiles }, "Ctrl+Shift+S") | Out-Null
+        $MyMenu.Submenus.Add("Save & Commit all unnamed files", { Save-AllUnnamedFiles -GeneralModuleDetails $psd1 }, "Ctrl+Alt+S") | Out-Null
+        $MyMenu.Submenus.Add("Align = signs in selected text.", { AlignEquals }, 'F6')
+        $MyMenu.Submenus.Add("Clean up whitespace", { CleanWhitespace }, 'F7')
+
 
 Put the below variables psd1 & DefaultPesterTests in your PowerShell Profile so that It can always be called - Be sure to change the details to your own.
 $psd1 = @{
@@ -376,16 +379,30 @@ $psd1 = @{
     ModuleVersion = '0.0.1'
     PrivateData = @{Twitter = '@ryanyates1990'; Blog='www.kilasuit.org/blog'}
 }
-$DefaultScriptPesterTests = Get-Content -Path "$(Split-path -Path ((get-module PSISE_Addons -ListAvailable).Path) -Parent)\PSISE_Addons.default.script.tests.ps1"
 $DefaultPesterTests = Get-Content -Path "$(Split-path -Path ((get-module PSISE_Addons -ListAvailable).Path) -Parent)\PSISE_Addons.default.tests.ps1"
+
 }
 #>
 
-
-
-#region Dave Wyatt additons
-function Get-AlignedText
-{
+#region Dave Wyatt's Additions
+function Get-AlignedText {
+<#
+        .SYNOPSIS
+        Uses the Highlighted Text to Align based on the = delimiter - For Splatting
+         
+        .DESCRIPTION
+        Uses the Highlighted Text to Align based on the = delimiter - For Splatting
+        
+        .EXAMPLE
+        $psise.CurrentFile.Editor.InsertText((Get-AlignedText -Text $psISE.CurrentFile.Editor.SelectedText -Delimiter '='))
+                        
+        .NOTES
+        AUTHOR
+        Dave Wyatt
+        LICENSE
+        MIT 
+        
+      #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
@@ -430,23 +447,49 @@ function Get-AlignedText
     ) -join "`r`n"
 }
 
+function AlignEquals {
 <#
-     These bits go into my profile:
-
-function AlignEquals
-{
+        .SYNOPSIS
+        Used to Align text based on the = delimiter - For Splatting
+         
+        .DESCRIPTION
+        Used to Align text based on the = delimiter - For Splatting
+        
+        .EXAMPLE
+        $MyMenu.Submenus.Add("Align = signs in selected text.", { AlignEquals }, 'F6')
+                        
+        .NOTES
+        AUTHOR
+        Dave Wyatt
+        LICENSE
+        MIT 
+        
+      #>
+      [cmdletbinding()]
+      param ()
     $psise.CurrentFile.Editor.InsertText((Get-AlignedText -Text $psISE.CurrentFile.Editor.SelectedText -Delimiter '='))
 }
 
-$null = $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("Align = signs in selected text.", { AlignEquals }, 'F6')
-
-     To use it, I highlight a block of code (the entire lines, including leading whitespace) and press F6.
-
-    Another useful profile hotkey, to replace all tabs with spaces, remove trailing spaces, and make sure the file ends with a newline.
-    (for clean Git commits.)
-
-function CleanWhitespace
-{
+function CleanWhitespace {
+<#
+        .SYNOPSIS
+        Used to clean whitespace in Current file for Git Commits
+         
+        .DESCRIPTION
+        Used to clean whitespace in Current file for Git Commits
+                
+        .EXAMPLE
+        $MyMenu.Submenus.Add("Clean up whitespace", { CleanWhitespace }, 'F7')
+                        
+        .NOTES
+        AUTHOR
+        Dave Wyatt
+        LICENSE
+        MIT 
+        
+      #>
+      [cmdletbinding()]
+      param ()
     $newText = $psise.CurrentFile.Editor.Text -replace '\t', '    ' -replace '[ ]+([\r\n])', '$1' -replace '^\s*?$' -split '\r?\n' -join "`r`n"
     if ($newText.Length -gt 0 -and $newText[-1] -ne "`n")
     {
@@ -459,12 +502,27 @@ function CleanWhitespace
     }
 }
 
-$null = $psISE.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("Clean up whitespace", { CleanWhitespace }, 'F7')
-
-
-     For writing proxy functions:
-
 function Get-ProxyCode {
+<#
+        .SYNOPSIS
+        Used to get Proxy Code from a function
+         
+        .DESCRIPTION
+        Used to get Proxy Code from a function
+        
+        .EXAMPLE
+        gpc Get-Command | nt
+        
+        .EXAMPLE
+        Get-ProxyCode Get-Command | New-IseTab
+                        
+        .NOTES
+        AUTHOR
+        Dave Wyatt
+        LICENSE
+        MIT 
+        
+      #>
     [CmdletBinding()]
     [OutputType([String])]
     param (
@@ -507,6 +565,26 @@ function Get-ProxyCode {
 Set-Alias -Name gpc -Value Get-ProxyCode
 
 function New-ISETab {
+<#
+        .SYNOPSIS
+        Creates a New ISE Tab
+         
+        .DESCRIPTION
+        Creates a New ISE Tab
+        
+        .EXAMPLE
+        nt
+        
+        .EXAMPLE
+        Get-ProxyCode Get-Command | New-IseTab
+                        
+        .NOTES
+        AUTHOR
+        Dave Wyatt
+        LICENSE
+        MIT 
+        
+      #>
     [CmdletBinding()]
     param(
         [Parameter(Mandatory=$false, Position=1, ValueFromPipeline = $true)]
@@ -551,11 +629,4 @@ function New-ISETab {
 }
 
 Set-Alias -Name nt -Value New-ISETab
-
-
-      Typical usage:  gpc Get-Command | nt
-                      Get-ProxyCode Get-Command | New-IseTab
-
-
-#>
 #endregion
