@@ -12,7 +12,7 @@
 RootModule = 'PSISE_Addons.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.0'
+ModuleVersion = '0.1.2'
 
 # ID used to uniquely identify this module
 GUID = '06b814cc-9ade-444f-a667-15ab6fbd3487'
@@ -21,10 +21,10 @@ GUID = '06b814cc-9ade-444f-a667-15ab6fbd3487'
 Author = 'Ryan Yates'
 
 # Company or vendor of this module
-CompanyName = 'Unknown'
+CompanyName = 'Re-Digitise'
 
 # Copyright statement for this module
-Copyright = '© 2016 Ryan Yates'
+Copyright = '© 2016 Re-Digitise'
 
 # Description of the functionality provided by this module
 Description = 'PSISE_Addons is a PowerShell Module that adds functionality to make Git Commits and Pester testing easier to maintain'
@@ -66,8 +66,7 @@ FormatsToProcess = @()
 # NestedModules = @()
 
 # Functions to export from this module
-FunctionsToExport = 
-               'Get-CustomCommitMessage Request-YesOrNo Save-AllNamedFiles Save-AllUnnamedFiles Save-CurrentISEFile'
+FunctionsToExport = @('AlignEquals','CleanWhitespace','Get-AlignedText','Get-CustomCommitMessage','Get-ProxyCode','New-ISETab','Request-YesOrNo','Save-AllNamedFiles','Save-AllUnnamedFiles','Save-CurrentISEFile')
 
 # Cmdlets to export from this module
 CmdletsToExport = @()
@@ -96,16 +95,19 @@ PrivateData = @{
     #UkPowerShellUserGroup of this module
     UkPowerShellUserGroup = 'www.get-psuguk.org'
 
-    #Twitter of this module
+    #Twitter Handle of the Main Author of this module
     Twitter = '@ryanyates1990'
 
-    #Name of this module
+    #Name of the Main Author of this module
     Name = 'Ryan Yates'
 
+    #External Program Dependancies
+    AllExternalDependancies = @('Git','PSScriptAnalyzer','Pester')
+    
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        Tags = @('Pester','ISE','PSScriptAnaylzer','Script Creation','Module Creation','Creation Workflow Simplification','PSDrives')
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/kilasuit/PSISE_Addons/readme.md'
@@ -117,7 +119,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = 'Initial starting release of this module'
+        ReleaseNotes = "Added Dave Wyatt's Addtions as well as some Amendments to the Core Functions of this Module"
 
         # External dependent modules of this module
         # ExternalModuleDependencies = ''
