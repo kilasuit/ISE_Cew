@@ -1,4 +1,4 @@
-﻿#Module#PSISE_Addons#
+﻿#Module#ISE_Cew#
 Function Save-AllNamedFiles {
     <#
         .SYNOPSIS
@@ -356,7 +356,7 @@ Suggestion to put this in your PowerShell ISE Profile or in a General Profile in
 
 if ($host.Name -eq "Windows PowerShell ISE Host") {
 
-        $MyMenu = $psise.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("PSISE_Addons",$null,$null)
+        $MyMenu = $psise.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("ISE_Cew",$null,$null)
         $MyMenu.Submenus.Add("Save & Commit Current ISE File", { Save-CurrentISEFile }, "Ctrl+Alt+Shift+S") | Out-Null
         $MyMenu.Submenus.Add("Save & Commit all files that have been named", { Save-AllNamedFiles }, "Ctrl+Shift+S") | Out-Null
         $MyMenu.Submenus.Add("Save & Commit all unnamed files", { Save-AllUnnamedFiles -GeneralModuleDetails $psd1 }, "Ctrl+Alt+S") | Out-Null
@@ -379,7 +379,7 @@ $psd1 = @{
     ModuleVersion = '0.0.1'
     PrivateData = @{Twitter = '@ryanyates1990'; Blog='www.kilasuit.org/blog'}
 }
-$DefaultPesterTests = Get-Content -Path "$(Split-path -Path ((get-module PSISE_Addons -ListAvailable).Path) -Parent)\PSISE_Addons.default.tests.ps1"
+$DefaultPesterTests = Get-Content -Path "$(Split-path -Path ((get-module ISE_Cew -ListAvailable).Path) -Parent)\PSISE_Addons.default.tests.ps1"
 
 }
 #>
