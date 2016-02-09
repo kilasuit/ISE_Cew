@@ -379,7 +379,7 @@ $psd1 = @{
     ModuleVersion = '0.0.1'
     PrivateData = @{Twitter = '@ryanyates1990'; Blog='www.kilasuit.org/blog'}
 }
-$DefaultPesterTests = Get-Content -Path "$(Split-path -Path ((get-module ISE_Cew -ListAvailable).Path) -Parent)\PSISE_Addons.default.tests.ps1"
+$DefaultPesterTests = Get-Content -Path "$(Split-path -Path ((get-module ISE_Cew -ListAvailable).Path) -Parent)\ISE_Cew.default.tests.ps1"
 
 }
 #>
