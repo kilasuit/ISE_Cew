@@ -292,7 +292,7 @@ If ($host.Name -ne 'Windows PowerShell ISE Host')
                             New-Item -Path .\LICENSE.MD -ItemType File -Value $LicenseMDContent -Force | Out-Null
                             Set-Content -Path .\$filename.basic.tests.ps1 -Value $defaultPesterTests ;
                             Set-Location .. ; 
-                            git add $filename\* ;
+                            git add --all ;
                             $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
                             if($CustomCommit) {$CustomCommitMessage = Get-CustomCommitMessage -filename $filename  ; git commit -m $CustomCommitMessage }
                             else { git commit -m "Saving file $displayname at $(get-date -Format "dd/MM/yyyy HH:mm") and commiting to Repo"}
