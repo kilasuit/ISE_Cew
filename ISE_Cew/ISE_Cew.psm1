@@ -154,6 +154,8 @@ Function Save-AllUnnamedFiles {
                 if ($type -eq 'Script')  {
                     New-Item -Path .\$filename.basic.tests.ps1 -ItemType File -Force | Out-Null ;
                     New-Item -Path .\$filename.bespoke.tests.ps1 -ItemType File -Force | Out-Null ;
+                    New-Item -Path .\Readme.md -ItemType File -Value "This is a Readme file for $filename" -Force | Out-Null ;
+                    New-Item -Path .\LICENSE.MD -ItemType File -Value $LicenseMDContent -Force | Out-Null 
                     Set-Content -Path .\$filename.basic.tests.ps1 -Value $defaultPesterTests ;
                     git add --all  ;
                     $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
@@ -165,6 +167,8 @@ Function Save-AllUnnamedFiles {
                     New-ModuleManifest @psd1 ;
                     New-Item -Path .\$filename.basic.tests.ps1 -ItemType File -Force | Out-Null ;
                     New-Item -Path .\$filename.bespoke.tests.ps1 -ItemType File -Force | Out-Null ;
+                    New-Item -Path .\Readme.md -ItemType File -Value "This is a Readme file for $filename" -Force | Out-Null ;
+                    New-Item -Path .\LICENSE.MD -ItemType File -Value $LicenseMDContent -Force | Out-Null
                     Set-Content -Path .\$filename.basic.tests.ps1 -Value $defaultPesterTests ;
                     git add --all ;
                     $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
@@ -269,6 +273,8 @@ If ($host.Name -ne 'Windows PowerShell ISE Host')
                         if ($type -eq 'Script')  { 
                             New-Item -Path .\$filename.basic.tests.ps1 -ItemType File -Force | Out-Null ;
                             New-Item -Path .\$filename.bespoke.tests.ps1 -ItemType File -Force | Out-Null ;
+                            New-Item -Path .\Readme.md -ItemType File -Value "This is a Readme file for $filename" -Force | Out-Null ;
+                            New-Item -Path .\LICENSE.MD -ItemType File -Value $LicenseMDContent -Force | Out-Null
                             Set-Content -Path .\$filename.basic.tests.ps1 -Value $defaultPesterTests ;
                             git add --all ;
                             $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
@@ -282,6 +288,8 @@ If ($host.Name -ne 'Windows PowerShell ISE Host')
                             New-ModuleManifest @psd1 ;
                             New-Item -Path .\$filename.basic.tests.ps1 -ItemType File -Force | Out-Null ;
                             New-Item -Path .\$filename.bespoke.tests.ps1 -ItemType File -Force | Out-Null ;
+                            New-Item -Path .\Readme.md -ItemType File -Value "This is a Readme file for $filename" -Force | Out-Null ;
+                            New-Item -Path .\LICENSE.MD -ItemType File -Value $LicenseMDContent -Force | Out-Null
                             Set-Content -Path .\$filename.basic.tests.ps1 -Value $defaultPesterTests ;
                             Set-Location .. ; 
                             git add $filename\* ;
@@ -380,7 +388,8 @@ $psd1 = @{
     PrivateData = @{Twitter = '@ryanyates1990'; Blog='www.kilasuit.org/blog'}
 }
 $DefaultPesterTests = Get-Content -Path "$(Split-path -Path ((get-module ISE_Cew -ListAvailable).Path) -Parent)\ISE_Cew.default.tests.ps1"
-
+$LicenseMDContent = Get-Content -Path "$(Split-path -Path ((get-module ISE_Cew -ListAvailable).Path) -Parent)\Sample_LICENSE.MD"
+$LicenseMDContent = $LicenseMDContent.replace('Ryan Yates',$psd1.Author)
 }
 #>
 
