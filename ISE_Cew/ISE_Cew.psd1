@@ -12,7 +12,7 @@
 RootModule = 'ISE_Cew.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.3'
+ModuleVersion = '0.1.4'
 
 # ID used to uniquely identify this module
 GUID = '06b814cc-9ade-444f-a667-15ab6fbd3487'
@@ -90,10 +90,10 @@ FileList = @()
 PrivateData = @{
 
     #BlogUrl of this module
-    BlogUrl = 'www.kilasuit.org/blog'
+    BlogUrl = 'http://blog.kilasuit.org'
 
     #UkPowerShellUserGroup of this module
-    UkPowerShellUserGroup = 'www.get-psuguk.org'
+    UkPowerShellUserGroup = 'http://www.get-psuguk.org'
 
     #Twitter Handle of the Main Author of this module
     Twitter = '@ryanyates1990'
@@ -110,7 +110,7 @@ PrivateData = @{
         Tags = @('Pester','ISE','PSScriptAnaylzer','Script Creation','Module Creation','Creation Workflow Simplification','PSDrives')
 
         # A URL to the license for this module.
-        LicenseUri = 'https://github.com/kilasuit/ISE_Cew/License.md'
+        LicenseUri = 'https://github.com/kilasuit/ISE_Cew/License'
 
         # A URL to the main website for this project.
         ProjectUri = 'https://github.com/kilasuit/ISE_Cew'
