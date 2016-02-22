@@ -48,7 +48,7 @@ Description = 'ISE_Cew is a PowerShell Module that adds functionality to make Gi
 ProcessorArchitecture = 'None'
 
 # Modules that must be imported into the global environment prior to importing this module
-# RequiredModules = @()
+RequiredModules = @('Pester','PSScriptAnalyzer')
 
 # Assemblies that must be loaded prior to importing this module
 RequiredAssemblies = @()
@@ -119,7 +119,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = "Added Dave Wyatt's Addtions as well as some Amendments to the Core Functions of this Module"
+        ReleaseNotes = "Additional changes including creation of LICENSE & README files as part of the functions"
 
         # External dependent modules of this module
         ExternalModuleDependencies = @('Pester','PSScriptAnalyzer')
