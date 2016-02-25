@@ -30,7 +30,7 @@ Copyright = '© 2016 Re-Digitise'
 Description = 'ISE_Cew is a PowerShell Module that adds functionality to make Git Commits and Pester testing easier to maintain'
 
 # Minimum version of the Windows PowerShell engine required by this module
-PowerShellVersion = '4'
+# PowerShellVersion = ''
 
 # Name of the Windows PowerShell host required by this module
 # PowerShellHostName = ''
