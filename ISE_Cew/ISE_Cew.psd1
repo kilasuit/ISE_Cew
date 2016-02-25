@@ -12,7 +12,7 @@
 RootModule = 'ISE_Cew.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.4'
+ModuleVersion = '0.1.5'
 
 # ID used to uniquely identify this module
 GUID = '06b814cc-9ade-444f-a667-15ab6fbd3487'
@@ -30,7 +30,7 @@ Copyright = '© 2016 Re-Digitise'
 Description = 'ISE_Cew is a PowerShell Module that adds functionality to make Git Commits and Pester testing easier to maintain'
 
 # Minimum version of the Windows PowerShell engine required by this module
-# PowerShellVersion = ''
+PowerShellVersion = '4'
 
 # Name of the Windows PowerShell host required by this module
 # PowerShellHostName = ''
@@ -48,7 +48,7 @@ Description = 'ISE_Cew is a PowerShell Module that adds functionality to make Gi
 ProcessorArchitecture = 'None'
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @('Pester','PSScriptAnalyzer')
+RequiredModules = @(@{ ModuleName = 'Pester'; ModuleVersion = '3.3.14'},@{ ModuleName = 'PSScriptAnalyzer'; ModuleVersion = '1.4.0'})
 
 # Assemblies that must be loaded prior to importing this module
 RequiredAssemblies = @()
@@ -119,7 +119,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = "Additional changes including creation of LICENSE & README files as part of the functions"
+        ReleaseNotes = "Changed the Required Moodules so that it will enforce the download of the dependant modules"
 
         # External dependent modules of this module
         ExternalModuleDependencies = @('Pester','PSScriptAnalyzer')
