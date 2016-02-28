@@ -12,7 +12,7 @@
 RootModule = 'ISE_Cew.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.5'
+ModuleVersion = '0.1.6'
 
 # ID used to uniquely identify this module
 GUID = '06b814cc-9ade-444f-a667-15ab6fbd3487'
@@ -21,7 +21,7 @@ GUID = '06b814cc-9ade-444f-a667-15ab6fbd3487'
 Author = 'Ryan Yates'
 
 # Company or vendor of this module
-CompanyName = 'Re-Digitise'
+CompanyName = 'kilasuit'
 
 # Copyright statement for this module
 Copyright = '© 2016 Re-Digitise'
