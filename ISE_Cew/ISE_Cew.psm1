@@ -291,7 +291,6 @@ If ($host.Name -ne 'Windows PowerShell ISE Host')
                             New-Item -Path .\README.md -ItemType File -Value "This is a Readme file for $filename" -Force | Out-Null ;
                             New-Item -Path .\LICENSE -ItemType File -Value $LicenseMDContent -Force | Out-Null
                             Set-Content -Path .\$filename.basic.tests.ps1 -Value $defaultPesterTests ;
-                            Set-Location .. ; 
                             git add --all ;
                             $CustomCommit = Request-YesOrNo -title 'Pre-Commit Message' -message "Do you want to provide a Custom Commit Message for $filename"
                             if($CustomCommit) {$CustomCommitMessage = Get-CustomCommitMessage -filename $filename  ; git commit -m $CustomCommitMessage }
