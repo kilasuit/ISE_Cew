@@ -12,7 +12,7 @@
 RootModule = 'ISE_Cew.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.6'
+ModuleVersion = '0.1.7'
 
 # ID used to uniquely identify this module
 GUID = '06b814cc-9ade-444f-a667-15ab6fbd3487'
@@ -48,7 +48,7 @@ Description = 'ISE_Cew is a PowerShell Module that adds functionality to make Gi
 ProcessorArchitecture = 'None'
 
 # Modules that must be imported into the global environment prior to importing this module
-#RequiredModules = @(@{ ModuleName = 'Pester'; ModuleVersion = '3.3.14'},@{ ModuleName = 'PSScriptAnalyzer'; ModuleVersion = '1.4.0'})
+RequiredModules = @(@{ ModuleName = 'Pester'},@{ ModuleName = 'PSScriptAnalyzer'})
 
 # Assemblies that must be loaded prior to importing this module
 RequiredAssemblies = @()
@@ -107,7 +107,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @('Pester','ISE','PSScriptAnaylzer','Script Creation','Module Creation','Creation Workflow Simplification','PSDrives')
+        #Tags = @('Pester','ISE','PSScriptAnaylzer','Script Creation','Module Creation','Creation Workflow Simplification','PSDrives')
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/kilasuit/ISE_Cew/License'
