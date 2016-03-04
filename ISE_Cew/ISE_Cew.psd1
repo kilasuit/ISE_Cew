@@ -12,7 +12,7 @@
 RootModule = 'ISE_Cew.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.7'
+ModuleVersion = '0.1.9'
 
 # ID used to uniquely identify this module
 GUID = '06b814cc-9ade-444f-a667-15ab6fbd3487'
@@ -30,10 +30,10 @@ Copyright = '© 2016 Re-Digitise'
 Description = 'ISE_Cew is a PowerShell Module that adds functionality to make Git Commits and Pester testing easier to maintain'
 
 # Minimum version of the Windows PowerShell engine required by this module
-# PowerShellVersion = ''
+PowerShellVersion = '4'
 
 # Name of the Windows PowerShell host required by this module
-# PowerShellHostName = ''
+PowerShellHostName = 'ISE'
 
 # Minimum version of the Windows PowerShell host required by this module
 # PowerShellHostVersion = ''
@@ -48,7 +48,7 @@ Description = 'ISE_Cew is a PowerShell Module that adds functionality to make Gi
 ProcessorArchitecture = 'None'
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @(@{ ModuleName = 'Pester'},@{ ModuleName = 'PSScriptAnalyzer'})
+RequiredModules = @(@{ ModuleName = 'Pester'; ModuleVersion = '3.3.14'},@{ ModuleName = 'PSScriptAnalyzer'; ModuleVersion = '1.4.0'})
 
 # Assemblies that must be loaded prior to importing this module
 RequiredAssemblies = @()
@@ -84,7 +84,7 @@ AliasesToExport = @()
 # ModuleList = @()
 
 # List of all files packaged with this module
-FileList = @()
+FileList = @('ISE_Cew.bespoke.Tests.ps1','ISE_Cew.basic.Tests.ps1','ISE_Cew.psd1','ISE_Cew.psm1','ISE_Cew.Tests.ps1','Sample_LICENSE.MD')
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
 PrivateData = @{
@@ -119,10 +119,10 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = "Changed the Required Moodules so that it will enforce the download of the dependant modules"
+        ReleaseNotes = "Test change to Required Modules & file list - no functional changes"
 
         # External dependent modules of this module
-        ExternalModuleDependencies = @('Pester','PSScriptAnalyzer')
+        ExternalModuleDependencies = @(@{ ModuleName = 'Pester'; ModuleVersion = '3.3.14'},@{ ModuleName = 'PSScriptAnalyzer'; ModuleVersion = '1.4.0'})
 
     } # End of PSData hashtable
     
