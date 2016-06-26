@@ -12,7 +12,7 @@
 RootModule = 'ISE_Cew.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.9'
+ModuleVersion = '0.1.10'
 
 # ID used to uniquely identify this module
 GUID = '06b814cc-9ade-444f-a667-15ab6fbd3487'
@@ -21,10 +21,10 @@ GUID = '06b814cc-9ade-444f-a667-15ab6fbd3487'
 Author = 'Ryan Yates'
 
 # Company or vendor of this module
-CompanyName = 'kilasuit'
+CompanyName = 'Re-Digitise'
 
 # Copyright statement for this module
-Copyright = '© 2016 Re-Digitise'
+Copyright = '© 2016 Re-Digitise Ltd'
 
 # Description of the functionality provided by this module
 Description = 'ISE_Cew is a PowerShell Module that adds functionality to make Git Commits and Pester testing easier to maintain'
@@ -48,7 +48,7 @@ Description = 'ISE_Cew is a PowerShell Module that adds functionality to make Gi
 ProcessorArchitecture = 'None'
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @(@{ ModuleName = 'Pester'; ModuleVersion = '3.3.14'},@{ ModuleName = 'PSScriptAnalyzer'; ModuleVersion = '1.4.0'})
+RequiredModules = @(@{ ModuleName = 'Pester'; ModuleVersion = '3.3.14' },@{ ModuleName = 'PSScriptAnalyzer'; ModuleVersion = '1.4.0'})
 
 # Assemblies that must be loaded prior to importing this module
 RequiredAssemblies = @()
@@ -66,7 +66,7 @@ FormatsToProcess = @()
 # NestedModules = @()
 
 # Functions to export from this module
-FunctionsToExport = @('AlignEquals','CleanWhitespace','Get-AlignedText','Get-CustomCommitMessage','Get-ProxyCode','New-ISETab','Request-YesOrNo','Save-AllNamedFiles','Save-AllUnnamedFiles','Save-CurrentISEFile')
+FunctionsToExport = @('AlignEquals','CleanWhitespace','Get-AlignedText','Get-CustomCommitMessage','Get-ProxyCode','New-ISETab','Request-YesOrNo','Save-AllNamedFile','Save-AllUnnamedFile','Save-CurrentISEFile')
 
 # Cmdlets to export from this module
 CmdletsToExport = @()
@@ -84,7 +84,25 @@ AliasesToExport = @()
 # ModuleList = @()
 
 # List of all files packaged with this module
-FileList = @('ISE_Cew.bespoke.Tests.ps1','ISE_Cew.basic.Tests.ps1','ISE_Cew.psd1','ISE_Cew.psm1','ISE_Cew.Tests.ps1','Sample_LICENSE.MD')
+FileList = @(
+'.\FunctionTests.txt',
+'.\ISE_Cew.psd1',
+'.\ISE_Cew.psm1',
+'.\ISE_Cew.Tests.ps1',
+'.\ModuleTests.txt',
+'.\ProfileExample.txt',
+'.\Sample_LICENSE.MD',
+'.\Standardpsm1.txt',
+'.\Public\AlignEquals.ps1',
+'.\Public\CleanWhitespace.ps1',
+'.\Public\Get-AlignedText.ps1',
+'.\Public\Get-CustomCommitMessage.ps1',
+'.\Public\Get-ProxyCode.ps1',
+'.\Public\New-ISETab.ps1',
+'.\Public\Request-YesOrNo.ps1',
+'.\Public\Save-AllNamedFile.ps1',
+'.\Public\Save-AllUnnamedFile.ps1',
+'.\Public\Save-CurrentISEFile.ps1')
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
 PrivateData = @{
@@ -107,7 +125,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        #Tags = @('Pester','ISE','PSScriptAnaylzer','Script Creation','Module Creation','Creation Workflow Simplification','PSDrives')
+        Tags = @('ISE','Script Creation','Module Creation','Creation Workflow Simplification','PSDrives')
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/kilasuit/ISE_Cew/License'
@@ -122,7 +140,7 @@ PrivateData = @{
         ReleaseNotes = "Test change to Required Modules & file list - no functional changes"
 
         # External dependent modules of this module
-        ExternalModuleDependencies = @(@{ ModuleName = 'Pester'; ModuleVersion = '3.3.14'},@{ ModuleName = 'PSScriptAnalyzer'; ModuleVersion = '1.4.0'})
+        ExternalModuleDependencies = @('Pester','PSScriptAnalyzer')
 
     } # End of PSData hashtable
     
