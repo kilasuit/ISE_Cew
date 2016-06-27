@@ -108,7 +108,7 @@ Describe "Testing all Public Functions in this Repo to be be correctly formatted
 if ($PublicFunctionsTests.count -gt 0) {
 
     foreach($PublicFunctionTest in $PublicFunctionsTests)
-        { Invoke-Pester $PublicFunctionTest.FullName -CodeCoverage $PublicFunctionTest.FullName.Replace('.Tests','') }
+        { . $PublicFunctionTest.FullName }
 
     }
 

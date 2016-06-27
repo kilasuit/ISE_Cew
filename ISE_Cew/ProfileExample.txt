@@ -1,0 +1,36 @@
+# Suggestion to put this in your PowerShell ISE Profile or in a General Profile in a scriptblock like the following 
+
+# These Locations must exist to be able to create New Directories for New Scripts and Modules as part of this module
+New-PsDrive -Name Scripts-WIP -PSProvider FileSystem -Root 'C:\Scripts-WIP' | out-null
+New-PsDrive -Name Modules-WIP -PSProvider FileSystem -Root 'C:\Modules-WIP' | out-null
+
+if ($host.Name -eq "Windows PowerShell ISE Host") {
+
+        $MyMenu = $psise.CurrentPowerShellTab.AddOnsMenu.Submenus.Add("ISE_Cew",$null,$null)
+        $MyMenu.Submenus.Add("Save & Commit Current ISE File", { Save-CurrentISEFile }, "Ctrl+Alt+Shift+S") | Out-Null
+        $MyMenu.Submenus.Add("Save & Commit all files that have been named", { Save-AllNamedFile }, "Ctrl+Shift+S") | Out-Null
+        $MyMenu.Submenus.Add("Save & Commit all unnamed files", { Save-AllUnnamedFile -GeneralModuleDetails $psd1 }, "Ctrl+Alt+S") | Out-Null
+        $MyMenu.Submenus.Add("Align = signs in selected text.", { AlignEquals }, 'F6')
+        $MyMenu.Submenus.Add("Clean up whitespace", { CleanWhitespace }, 'F7')
+
+
+Put the below variables psd1 & DefaultPesterTests in your PowerShell Profile so that It can always be called - Be sure to change the details to your own.
+$psd1 = @{
+    Path = '' #Please Leave blank as it is automatically populated by the function;
+    Author = 'Ryan Yates';
+    CompanyName = '';
+    Copyright = "© $(Get-date -Format yyyy) Ryan Yates";
+    RootModule = '' # Please leave this blank as it is automatically populated by the function;
+    Description = 'Initial Description for *ModuleName*'#This is replaced correctly in the function;
+    ProjectUri = [uri]'https://github.com/kilasuit/poshfunctions' # Suggested GitHub Location;
+    LicenseUri = [uri]'https://github.com/kilasuit/poshfunctions/License.md' #Suggested License;
+    ReleaseNotes = 'Initial starting release of this module';
+    DefaultCommandPrefix = '';
+    ModuleVersion = '0.0.1'
+    PrivateData = @{Twitter = '@ryanyates1990'; Blog='www.kilasuit.org/blog'}
+}
+$DefaultFunctionPesterTests = Get-Content -Path "$(Split-path -Path ((get-module ISE_Cew -ListAvailable).Path) -Parent)\FunctionTests.txt"
+$DefaultPesterTests = Get-Content -Path "$(Split-path -Path ((get-module ISE_Cew -ListAvailable).Path) -Parent)\ModuleTests.txt"
+$LicenseMDContent = Get-Content -Path "$(Split-path -Path ((get-module ISE_Cew -ListAvailable).Path) -Parent)\Sample_LICENSE.MD"
+$LicenseMDContent = $LicenseMDContent.replace('Ryan Yates',$psd1.Author)
+}

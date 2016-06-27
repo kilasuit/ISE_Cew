@@ -1,5 +1,4 @@
-﻿#Module#ISE_Cew#
-$Here = Split-Path -Parent $MyInvocation.MyCommand.Path
+﻿$Here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $PublicModules = Get-ChildItem "$here\Public" -Filter '*.ps1' -Recurse | Where-Object {$_.name -NotMatch "Tests.ps1"}
 $PrivateModules = Get-ChildItem "$here\Private" -Filter '*.ps1' -Recurse | Where-Object {$_.name -NotMatch "Tests.ps1"}
 
