@@ -4,6 +4,7 @@ install:
     - ps: |
         Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force
         Install-Module -Name Pester -Repository PSGallery -Force
+        Install-Module -Name PSScriptAnalyzer -Repository PSGallery -Force
 
 
 test_script:

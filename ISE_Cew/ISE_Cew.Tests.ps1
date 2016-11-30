@@ -1,4 +1,5 @@
 $Here = Split-Path -Parent $MyInvocation.MyCommand.Path
+Write-Output $here
 
 $PrivateFunctions = Get-ChildItem "$here\Private\" -Filter '*.ps1' -Recurse | Where-Object {$_.name -NotMatch "Tests.ps1"}
 $PublicFunctions = Get-ChildItem "$here\Public\" -Filter '*.ps1' -Recurse | Where-Object {$_.name -NotMatch "Tests.ps1"}
