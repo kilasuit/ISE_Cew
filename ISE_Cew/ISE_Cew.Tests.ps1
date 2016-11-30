@@ -1,15 +1,12 @@
-$Here = Split-Path -Parent $MyInvocation.MyCommand.Path
-Write-Output $here
+$PrivateFunctions = Get-ChildItem $PSScriptRoot\Private\ -Filter '*.ps1' -Recurse | Where-Object {$_.name -NotMatch "Tests.ps1"}
+$PublicFunctions = Get-ChildItem $PSScriptRoot\Public\ -Filter '*.ps1' -Recurse | Where-Object {$_.name -NotMatch "Tests.ps1"}
 
-$PrivateFunctions = Get-ChildItem "$here\Private\" -Filter '*.ps1' -Recurse | Where-Object {$_.name -NotMatch "Tests.ps1"}
-$PublicFunctions = Get-ChildItem "$here\Public\" -Filter '*.ps1' -Recurse | Where-Object {$_.name -NotMatch "Tests.ps1"}
-
-$PrivateFunctionsTests = Get-ChildItem "$here\Private\" -Filter '*Tests.ps1' -Recurse 
-$PublicFunctionsTests = Get-ChildItem "$here\Public\" -Filter '*Tests.ps1' -Recurse 
+$PrivateFunctionsTests = Get-ChildItem $PSScriptRoot\Private\ -Filter '*Tests.ps1' -Recurse 
+$PublicFunctionsTests = Get-ChildItem $PSScriptRoot\Public\ -Filter '*Tests.ps1' -Recurse 
 
 $Rules = Get-ScriptAnalyzerRule
 
-Import-Module "$Here\*.psd1"
+Import-Module "$PSScriptRoot\*.psd1"
 
 if ($PrivateFunctions.count -gt 0) {
 Describe "Testing all Private Functions in this Repo to be be correctly formatted" {
