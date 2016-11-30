@@ -12,7 +12,7 @@
 RootModule = 'ISE_Cew.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.10'
+ModuleVersion = '0.1.11'
 
 # ID used to uniquely identify this module
 GUID = '06b814cc-9ade-444f-a667-15ab6fbd3487'
@@ -137,7 +137,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = "Test change to Required Modules & file list - no functional changes"
+        ReleaseNotes = "Functional Change to Save-AllUnnamedFiles"
 
         # External dependent modules of this module
         ExternalModuleDependencies = @('Pester','PSScriptAnalyzer')
