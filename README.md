@@ -1,4 +1,7 @@
-# ISE_Cew  - Archived
+# ISE_Cew
+
+> Note this is an old & sorta semi-archived repository as I now make use of VSCode as opposed to ISE for my PowerShell Authoring.
+
 ISE_Cew is an addon for PowerShell ISE that simplifies the workflow for Script & Module Creation.
 
 CEW stands for Creation Efficency Workflow
